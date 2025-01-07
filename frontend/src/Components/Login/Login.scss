@@ -1,0 +1,156 @@
+// Variables (optional for customization)
+$primary-color: rgb(165, 202, 244);
+$text-color: rgb(228, 227, 248);
+$border-color: rgba(55, 65, 81, 1);
+$label-color: #cbced7;
+$line-color: rgb(165, 202, 244);
+
+// Main container for the form
+.Login{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(165, 202, 244) ;
+    .form-container {
+        width: 320px;
+        border-radius: 0.75rem;
+        background-color: rgb(25, 34, 55);
+        padding: 2rem;
+        color: $text-color;
+    
+        .title {
+        text-align: center;
+        font-size: 1.5rem;
+        line-height: 2rem;
+        font-weight: 700;
+        }
+    
+        .form {
+        margin-top: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        .input-group {
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+    
+            label {
+            display: block;
+            color: $label-color;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+            }
+    
+            input {
+            width: 90%;
+            border-radius: 0.375rem;
+            border: 1px solid $border-color;
+            outline: 0;
+            background-color: #e1e3ea;
+            padding: 0.75rem 1rem;
+            color: #211b02;
+    
+            &:focus {
+                border-color: $primary-color;
+            }
+            }
+        }
+    
+        .forgot {
+            display: flex;
+            justify-content: flex-end;
+            font-size: 0.75rem;
+            line-height: 1rem;
+            color: $label-color;
+            margin: 8px 0 14px 0;
+    
+            a {
+            color: $text-color;
+            text-decoration: none;
+            font-size: 16px;
+                
+            &:hover {
+                text-decoration: underline $primary-color;
+            }
+            }
+        }
+    
+        .sign {
+            display: block;
+            width: 100%;
+            background-color: $primary-color;
+            padding: 0.75rem;
+            text-align: center;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 600;
+        }
+        }
+    
+        .social-message {
+        display: flex;
+        align-items: center;
+        padding-top: 1rem;
+    
+        .line {
+            height: 1px;
+            flex: 1 1 0%;
+            background-color: $line-color;
+        }
+    
+        .message {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            color: $label-color;
+        }
+        }
+    
+        .social-icons {
+        display: flex;
+        justify-content: center;
+    
+        .icon {
+            border-radius: 0.125rem;
+            padding: 0.75rem;
+            border: none;
+            background-color: transparent;
+            margin-left: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+    
+            svg {
+            height: 1.25rem;
+            width: 1.25rem;
+            fill: $text-color;
+            }
+    
+            &:hover {
+            background-color: rgba(255, 255, 255, 0.1); // Slight hover effect for icons
+            }
+        }
+        }
+    
+        .signup {
+        text-align: center;
+        font-size: 0.95rem;
+        line-height: 1rem;
+        color: $label-color;
+    
+        a {
+            margin-left: 5px;
+            color: rgb(27, 27, 234);
+            text-decoration: none;
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+        }
+    }  
+}
