@@ -26,13 +26,14 @@
       .logo-container {
         text-align: center;
         font-weight: 600;
-        font-size: 18px;
+        font-size: 20px;
       }
   
       .form {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        gap: 16px;
       }
   
       .form-group {
@@ -65,11 +66,12 @@
   
       button {
         cursor: pointer;
+        width: 100%;
         font-weight: 700;
         transition: all 0.2s;
         padding: 5px 10px;
         border-radius: 100px;
-        background: #cfef00;
+        background: #1dddef;
         border: 1px solid transparent;
         display: flex;
         align-items: center;
@@ -77,11 +79,11 @@
       }
       
       button:hover {
-        background: #c4e201;
+        background: #53e9f7;
       }
       
       button > svg {
-        width: 34px;
+        width: 24px;
         margin-left: 10px;
         transition: transform 0.3s ease-in-out;
       }
@@ -106,7 +108,7 @@
       .signup-link {
         align-self: center;
         font-weight: 500;
-  
+        font-size: 16px;
         .link {
           font-weight: 400;
         }
