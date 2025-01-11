@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import axios from 'axios';
+import route from '../route';
 import './ForgotPass.scss'
 
 const ForgotPass = () => {
+  const navigate=useNavigate();
+  const [email, setEmail] = useState(''); 
+
+  const handleChange = (event) => {
+    setEmail(event.target.value);
+  };
+  const handleSubmit = async(event) => {
+    event.preventDefault(); 
+    const {status,data}=await axios.post(`${route()}verifyemail`,{email},{Headers:{"Content-Type":"application/json"}});
+    
+    if(status===201){
+      localStorage.setItem('email',email);
+      alert(data.msg);
+      navigate('/emailsuccess')
+    }else if(status===403){
+      alert(data.msg)
+    }
+    else{
+      alert(data.msg)
+    }
+  };
   return (
     <div className='ForgotPass'>
 <div class="form-container">
@@ -9,13 +33,13 @@ const ForgotPass = () => {
         Forgot Password
       </div>
 
-      <form class="form">
+      <form class="form"  onSubmit={handleSubmit}>
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="text" id="email" name="email" placeholder="Enter your email" />
+          <input type="text" id="email" name="email" placeholder="Enter your email" onChange={handleChange}/>
         </div>
 
-        <button>
+        <button type='submit'>
           <span>Continue</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
