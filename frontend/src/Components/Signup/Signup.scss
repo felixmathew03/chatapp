@@ -20,6 +20,7 @@ $bg-input: #f8fafc;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #1e293b;
     .modern-form {
         position: relative;
         width: 300px;
@@ -71,6 +72,8 @@ $bg-input: #f8fafc;
                 width: 150px;
                 height: 150px;
                 border-radius: 50%;
+                object-fit: cover;
+                object-position: top;
               }
             }
           }

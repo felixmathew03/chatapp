@@ -2,18 +2,20 @@ import React, { useState } from 'react';
 import {useNavigate,Link} from 'react-router-dom';
 import axios from 'axios';
 import route from '../route';
-import { AiOutlineUser, AiOutlineMail, AiOutlineLock, AiOutlinePhone } from "react-icons/ai";
+import { AiOutlineUpload, AiOutlineUser, AiOutlineMail, AiOutlineLock, AiOutlinePhone } from "react-icons/ai";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 import './Signup.scss'
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [showCPassword, setShowCPassword] = useState(false);
   const [user,setDetails]=useState({
-    usernaname:"",
-    profile:"",
-    password:"",
     email:"",
-    phone:""
+    password:"",
+    cpassword:"",
+    usernaname:"",
+    phone:"",
+    profile:""
   })
   const handleChange=(e)=>{
     setDetails((pre)=>({...pre,[e.target.name]:e.target.value}))
@@ -70,24 +72,12 @@ const Signup = () => {
                 {user.profile ? (
                 <img src={user.profile} alt="Profile" className="photo-preview" />
                 ) : (
-                <span>Upload Photo</span>
+                <span style={{display:'flex',alignItems:'center',justifyContent:'center',gap:'10px'}}>Upload Photo <AiOutlineUpload size={18} /> </span>
                 )}
             </label>
             </div>
         </div>
-        <div className="input-group">
-          <div className="input-wrapper">
-            <AiOutlineUser className="input-icon" />
-            <input
-                name='username'
-                id='username'
-              placeholder="Username"
-              className="form-input"
-              type="text"
-            />
-          </div>
-        </div>
-
+        
         <div className="input-group">
           <div className="input-wrapper">
             <AiOutlineMail className="input-icon" />
@@ -97,19 +87,7 @@ const Signup = () => {
               placeholder="Email"
               className="form-input"
               type="email"
-            />
-          </div>
-        </div>
-
-        <div className="input-group">
-          <div className="input-wrapper">
-            <AiOutlinePhone className="input-icon" />
-            <input
-            name='phone'
-                id='phone'
-              placeholder="Phone Number"
-              className="form-input"
-              type="number"
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -133,6 +111,53 @@ const Signup = () => {
             </button>
           </div>
         </div>
+
+        <div className="input-group">
+          <div className="input-wrapper">
+            <AiOutlineLock className="input-icon" />
+            <input
+            name='cpassword'
+                id='cpassword'
+              placeholder="Confirm Password"
+              className="form-input"
+              type={showCPassword ? "text" : "password"}
+            />
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowCPassword(!showCPassword)}
+            >
+              {showCPassword ? <IoIosEyeOff className="eye-icon" /> : <IoIosEye className="eye-icon" />}
+            </button>
+          </div>
+        </div>
+        
+        <div className="input-group">
+          <div className="input-wrapper">
+            <AiOutlineUser className="input-icon" />
+            <input
+                name='username'
+                id='username'
+              placeholder="Username"
+              className="form-input"
+              type="text"
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <div className="input-group">
+          <div className="input-wrapper">
+            <AiOutlinePhone className="input-icon" />
+            <input
+            name='phone'
+                id='phone'
+              placeholder="Phone Number"
+              className="form-input"
+              type="number"
+            />
+          </div>
+        </div>
       </div>
 
       <button className="submit-button" type="submit" onClick={handleSubmit}>
@@ -141,7 +166,7 @@ const Signup = () => {
       </button>
 
       <div className="form-footer">
-        <a className="login-link" href="#">
+        <a className="login-link" href="/login">
           Already have an account? <span>Login</span>
         </a>
       </div>

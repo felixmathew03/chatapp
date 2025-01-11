@@ -18,7 +18,6 @@ const Login = () => {
       if (status === 200) {
         localStorage.setItem("Auth", data.token);
         alert(data.msg)
-        // notify(data.msg || "Login successful!");
         navigate('/');
       } else { 
         alert(data.msg );
@@ -44,7 +43,7 @@ const Login = () => {
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password" onChange={handleChange} placeholder=""/>
                     <div class="forgot">
-                        <a rel="noopener noreferrer" href="#">Forgot Password ?</a>
+                        <a rel="noopener noreferrer" href="/forgotpassword">Forgot Password ?</a>
                     </div>
                 </div>
                 <button type='submit' class="sign">Sign in</button>
@@ -66,7 +65,7 @@ const Login = () => {
             </button>
             </div>
             <p class="signup">Don't have an account?
-                <a rel="noopener noreferrer" href="#" class="">Sign up</a>
+                <a rel="noopener noreferrer" href="/signup" class="">Sign up</a>
             </p>
         </div>
     </div>

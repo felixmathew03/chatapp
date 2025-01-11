@@ -13,12 +13,12 @@ const ForgotPass = () => {
   };
   const handleSubmit = async(event) => {
     event.preventDefault(); 
-    const {status,data}=await axios.post(`${route()}verifyemail`,{email},{Headers:{"Content-Type":"application/json"}});
+    const {status,data}=await axios.post(`${route()}forgotpassword`,{email},{Headers:{"Content-Type":"application/json"}});
     
     if(status===201){
       localStorage.setItem('email',email);
       alert(data.msg);
-      navigate('/emailsuccess')
+      navigate('/login')
     }else if(status===403){
       alert(data.msg)
     }
@@ -60,7 +60,7 @@ const ForgotPass = () => {
 
       <p class="signup-link">
         Don't have an account?
-        <a href="#" class="signup-link link"> Sign up now</a>
+        <a href="/signup" class="signup-link link"> Sign up now</a>
       </p>
     </div>
     </div>
