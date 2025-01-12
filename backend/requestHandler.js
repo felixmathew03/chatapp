@@ -46,6 +46,30 @@ export async function home(req,res) {
     }
 }
 
+export async function profile(req,res) {
+    try {
+        const _id=req.user.userId;
+        const user=await userSchema.findOne({_id},{password:0});
+        if(!user)
+           return res.status(403).send({msg:"Login to continue"});
+        return res.status(200).send(user);
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+
+export async function editDetails(req,res) {
+    try {
+        const _id=req.user.userId;
+        const {...details}=req.body;
+        const update=await userSchema.updateOne({_id},{$set:{...details}});
+        console.log(update);
+        return res.status(201).send({msg:"success"});
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+
 export async function listPeople(req,res) {
     try {
         const _id=req.user.userId;
@@ -90,75 +114,6 @@ export async function addMessage(req,res) {
     }
 }
 
-export async function forgotPassword(req,res) {
-  const {email}=req.body;
-  
-    try {
-        const user=await userSchema.findOne({email});
-        if(!user)
-            res.status(403).send({msg:"User not found"});
-    // send mail with defined transport object
-    //   const info = await transporter.sendMail({
-    //       from: `"Hai 👻" <${email}>`, // sender address
-    //       to: `${email}`, // list of receivers
-    //       subject: "Verify Mail ID", // Subject line
-    //       text: "Confirm your account", // plain text body
-    //       html: `<!DOCTYPE html>
-    // <html lang="en">
-    // <head>
-    //   <meta charset="UTF-8">
-    //   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    //   <title>Account Verification</title>
-    //   <style>
-    //       body {
-    //           font-family: Arial, sans-serif;
-    //           margin: 0;
-    //           padding: 0;
-    //           background-color: #f4f4f4;
-    //           color: #333;
-    //       }
-    //       .email-container {
-    //           width: 100%;
-    //           max-width: 600px;
-    //           margin: 0 auto;
-    //           background-color: #fff;
-    //           border: 1px solid #ddd;
-    //           padding: 20px;
-    //           border-radius: 8px;
-    //           text-align: center;
-    //       }
-    //       .btn {
-    //           display: inline-block;
-    //           background-color: #4CAF50;
-    //           color: #fff;
-    //           text-decoration: none;
-    //           padding: 15px 30px;
-    //           margin-top: 20px;
-    //           border-radius: 4px;
-    //           font-size: 18px;
-    //           text-align: center;
-    //       }
-    //   </style>
-    // </head>
-    // <body>
-
-    //   <div class="email-container">
-    //       <p>Hello,</p>
-    //       <p>Please verify your email address by clicking the button below.</p>
-    //       <a href="http://localhost:5173/changepassword" class="btn">Verify Your Account</a>
-    //   </div>
-
-    // </body>
-    // </html>`, // html body
-    //   });
-    // console.log("Message sent: %s", info.messageId);
-    // Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
-
-        return res.status(201).send({msg:"Check your mail",email});
-    } catch (error) {
-        return res.status(404).send({msg:"error"});
-    }
-}
 export async function signUp(req,res) {
   try {
       const {email,password,username,cpassword,phone,profile}=req.body;
@@ -204,3 +159,102 @@ export async function signIn(req,res) {
         return res.status(404).send({msg:"error"});
     }
 }
+
+export async function forgotPassword(req,res) {
+    const {email}=req.body;
+    
+      try {
+          const user=await userSchema.findOne({email});
+          if(!user)
+              res.status(403).send({msg:"User not found"});
+      // send mail with defined transport object
+        const info = await transporter.sendMail({
+            from: `"Hai 👻" <${email}>`, // sender address
+            to: `${email}`, // list of receivers
+            subject: "Change Password", // Subject line
+            text: "Confirm your account", // plain text body
+            html: `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Account Verification</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+                color: #333;
+            }
+            .email-container {
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #fff;
+                border: 1px solid #ddd;
+                padding: 20px;
+                border-radius: 8px;
+                text-align: center;
+            }
+            .btn {
+                display: inline-block;
+                background-color: #4CAF50;
+                color: #fff;
+                text-decoration: none;
+                padding: 15px 30px;
+                margin-top: 20px;
+                border-radius: 4px;
+                font-size: 18px;
+                text-align: center;
+            }
+        </style>
+      </head>
+      <body>
+  
+        <div class="email-container">
+            <p>Hello,</p>
+            <p>Please confirm your email address by clicking the button below and change password.</p>
+            <a href="http://localhost:5173/newpassword" class="btn">Change Your Password</a>
+        </div>
+  
+      </body>
+      </html>`, // html body
+        });
+      // console.log("Message sent: %s", info.messageId);
+      // Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
+  
+          return res.status(201).send({msg:"Check your mail",email});
+      } catch (error) {
+          return res.status(404).send({msg:"error"});
+      }
+  }
+  
+  export async function changePassword(req,res) {
+      try {
+          const {email,npassword,cpassword}=req.body;  
+          if(!(email&&npassword&&cpassword))
+              return res.status(404).send({msg:"feilds are empty"})
+  
+          const user=await userSchema.findOne({email})
+          if(user===null)
+              return res.status(404).send({msg:"invalid email"})
+          if(npassword!==cpassword)
+              return res.status(404).send({msg:"password not matched"})
+          //convert to hash and compare using bcrypt
+          const success=await bcrypt.compare(npassword,user.password);
+          if(success===true)
+              return res.status(404).send({msg:"Same password"})
+          bcrypt.hash(npassword,10).then((hashedPassword)=>{
+              userSchema.updateOne({email},{$set:{password:hashedPassword}}).then(()=>{
+                  return res.status(201).send({msg:"success"});
+              }).catch((error)=>{
+                  return res.status(404).send({msg:"Not registered"})
+              })
+          }).catch((error)=>{
+              return res.status(404).send({msg:"error"}); 
+          })
+      } catch (error) {
+          return res.status(404).send({msg:"error"});
+      }
+  }  

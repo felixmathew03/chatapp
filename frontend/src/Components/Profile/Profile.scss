@@ -1,0 +1,209 @@
+.Profile {
+    width: 60%;
+    margin: auto;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 20%;
+    flex-direction: column;
+    background-color: #e2edf4;
+    .profile-card {
+      width: 500px;
+      height: 400px;
+      border-radius: 10px;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+      gap: 1rem;
+      position: relative;
+      transition: all 0.3s;
+      z-index: 100;
+      overflow: hidden;
+  
+      .avatar {
+        width: 100%;
+        padding-top: 1.25rem;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+        position: relative;
+  
+        .img_container {
+          width: 100%;
+          position: relative;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 40;
+  
+          .hover-effect {
+            position: absolute;
+            width: 100%;
+            height: 50px;
+            background-color: #58b0e0;
+            bottom: 4px;
+            z-index: -1;
+            transition: all 0.3s;
+            transform: scale(0.5);
+            cursor: pointer;
+            &:hover {
+              transform: scale(1.4);
+              z-index: -1;
+            }
+          }
+        }
+  
+        .avatar-image {
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          border: 4px solid white;
+          transition: all 0.3s;
+          z-index: 40;
+          object-fit: cover;
+          object-position: top;
+        }
+  
+        .edit-icon {
+            position: absolute;
+            bottom: 2px;
+            right: 40%;
+            color: #030b70;
+            background-color: white;
+            cursor: pointer;
+            font-size: 1.15rem;
+            padding: 1.5% ;
+            padding-bottom: 0.8%;
+            border-radius: 50%;
+            border: none;
+            transition: color 0.3s;
+              z-index: 41;
+            &:hover {
+              color: #434955;
+            }
+        }
+  
+        input[type="file"] {
+          display: none;
+        }
+  
+      }
+  
+      .headings {
+        z-index: 40;
+        display: flex;
+        justify-content: space-around;
+        align-items: baseline;
+  
+        .edit-input {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: #434955;
+          background-color: transparent;
+          border: none;
+          border-bottom: 2px solid #434955;
+          outline: none;
+          text-align: center;
+          width: 100%;
+          margin-top: 1rem;
+  
+          &:focus {
+            border-color: #58b0e0;
+          }
+        }
+  
+        .save-btn {
+          color: #58b0e0;
+          cursor: pointer;
+          font-size: 1.25rem;
+          background: transparent;
+          border: none;
+          transition: color 0.3s;
+  
+          &:hover {
+            color: #434955;
+          }
+        }
+      }
+  
+      .contact-info {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+  
+        ul {
+          list-style-type: none;
+          display: flex;
+          flex-direction: column;
+          gap: 0.8rem;
+          padding-bottom: 1rem;
+  
+          li {
+            display: flex;
+            justify-content: space-around;
+            align-items: baseline;
+            gap: 0.5rem;
+  
+            .icon {
+              width: 25px;
+              height: 25px;
+              fill: #434955;
+              transition: fill 0.3s;
+  
+              &:hover {
+                fill: #58b0e0;
+              }
+            }
+  
+            .save-btn {
+              color: #58b0e0;
+              cursor: pointer;
+              font-size: 1.25rem;
+              background: transparent;
+              border: none;
+              transition: color 0.3s;
+  
+              &:hover {
+                color: #434955;
+              }
+            }
+  
+            .edit-input {
+              font-size: 1.25rem;
+              font-weight: 600;
+              color: #434955;
+              background-color: transparent;
+              border: none;
+              border-bottom: 2px solid #434955;
+              outline: none;
+              padding: 0.5rem;
+              text-align: left;
+              width: 100%;
+              margin-top: 0.5rem;
+  
+              &:focus {
+                border-color: #58b0e0;
+              }
+            }
+          }
+        }
+      }
+  
+      .divider {
+        width: 100%;
+        height: 3px;
+        background-color: #58b0e0;
+        transition: all 0.3s;
+        &:hover {
+          height: 5px;
+        }
+      }
+    }
+  }
+  

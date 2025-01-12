@@ -17,7 +17,7 @@ const Home = () => {
         try {
           const {status,data}=await axios.get(`${route()}home`,{headers:{"Authorization":`Bearer ${value}`}})
         if(status==200){
-            setChatMembers([...new Map(data.chatMembers.map(member => [member._id, member])).values()]);
+            setChatMembers([...new Map(data.chatMembers.map(member => [member._id, member])).values()].reverse());
         }else{
             alert(data.msg);
             navigate('/login')
