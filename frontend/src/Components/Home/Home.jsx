@@ -4,76 +4,41 @@ import route from '../route';
 import { FaComment } from 'react-icons/fa'; 
 import {Link, useNavigate} from 'react-router-dom'
 import './Home.scss';
+import Nav from '../Nav/Nav';
 
 const Home = () => {
     const value=localStorage.getItem("Auth");
     const navigate=useNavigate();
-    const [user,setUser]=useState({});
-    const [chatMembers,setChatMembers]=useState([{
-        profile:"dggg",username:"fgfg"
-    },{
-        profile:"dggg",username:"fgfg"
-    },{
-        profile:"dggg",username:"fgfg"
-    }])
-    const [isPopoverVisible, setIsPopoverVisible] = useState(false);
+    const [chatMembers,setChatMembers]=useState([]);
     useEffect(()=>{
-        // getDetails();
+        getDetails();
     },[])
     const getDetails=async()=>{
-        const {status,data}=await axios.get(`${route()}home`,{headers:{"Authorization":`Bearer ${value}`}})
+        try {
+          const {status,data}=await axios.get(`${route()}home`,{headers:{"Authorization":`Bearer ${value}`}})
         if(status==200){
-            setUser(data.user);
-            setChatMembers(data.chatMembers)
+            setChatMembers([...new Map(data.chatMembers.map(member => [member._id, member])).values()]);
         }else{
             alert(data.msg);
             navigate('/login')
         }
+        } catch (error) {
+          navigate('/login')
+        }
     }
-    const togglePopover = () => {
-        setIsPopoverVisible(!isPopoverVisible);
-    };
-    const handleLogout = () => {
-        localStorage.removeItem('Auth');
-        navigate('/login');
-    };
+    
   return (
     <div className='Home'>
-      <nav>
-        <div className="navbar-logo">
-            <img src="/img/logo.jpg" alt="Logo" className="logo-image" />
-            <h1 className="website-name">Conversa</h1>
-        </div>
-        <div className="user">
-            <h4>{user.name}</h4>
-            {/* Profile Icon & Popover */}
-            <div className="profile-containerr">
-              <img 
-                className="profile-icon" 
-                onClick={togglePopover} src={user.profile} alt='user'
-              />
-              {isPopoverVisible && (
-                <div className="profile-popover">
-                  <Link to={`/profile`}>
-                    <button className="popover-btn">Profile</button>
-                  </Link>
-                  <button className="popover-btn" onClick={handleLogout}>
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
-        </div>
-      </nav>
+      <Nav/>
       <div className="container">
-        {chatMembers.map((member,ind)=> <div className="content" key={ind}>
+        {chatMembers.map((member,ind)=> <Link to={`/chatcard/${member._id}`} className="content" key={ind}>
                 <img src={member.profile} alt={member.username} />
                 <p>{member.username}</p>
-            </div>
+            </Link>
         )}
       </div>
-        <button className="chatBtn" onClick={()=>{navigate('/chatcard')}}>
-            <FaComment size={30} color="white" />
+        <button className="chatBtn" onClick={()=>{navigate('/listpeople')}}>
+            <FaComment size={30} color="white" /> 
         </button>
     </div>
   )

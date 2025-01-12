@@ -1,30 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import route from '../route';
+import axios from 'axios';
 import './ChatCard.scss';
+import { Link, useParams } from 'react-router-dom';
+import { FiArrowLeft } from 'react-icons/fi'; 
+import { AiOutlineSend } from 'react-icons/ai';
 
 const ChatCard = () => {
+  const value=localStorage.getItem("Auth")
+  const {id}=useParams();
+  const [uid,setUid]=useState('')
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([
-    { text: 'Hello, how can I assist you today?', type: 'incoming' },
-    { text: 'I have a question about your services.', type: 'outgoing' },
-    { text: "Sure, I'm here to help. What would you like to know?", type: 'incoming' },
-  ]);
-
-  const handleSend = () => {
+  const [receiver, setReceiver] = useState({});
+  const [messages, setMessages] = useState([]);
+  useEffect(()=>{
+    getDetails();
+  },[])
+  const getDetails=async()=>{
+      const {status,data}=await axios.get(`${route()}chat/${id}`,{headers:{"Authorization":`Bearer ${value}`}})
+      if(status==200){
+          setMessages(data.chats);
+          setReceiver(data.receiver);
+          setUid(data.uid);
+      }else{
+          alert(data.msg);
+          navigate('/login')
+      }
+  }
+  const handleSend = async() => {
     if (message.trim()) {
-      setMessages([...messages, { text: message, type: 'outgoing' }]);
+      const currentDate = new Date(); 
+      const [date,time]=currentDate.toLocaleString().split(', ')
+      const {status,data}=await axios.post(`${route()}addmessage/${id}`,{message,date,time},{headers:{"Authorization":`Bearer ${value}`}});
+      if (status==201) {
+        if (data.msg=="success") {
+          getDetails();
+        }
+      }
       setMessage('');
     }
-  };
-
+  }; 
   return (
     <div className="chat-card">
       <div className="chat-header">
-        <div className="h2">Chat</div>
+        <Link to={'/'} className="h2">
+        <FiArrowLeft className="back-icon" /> 
+          <img src={receiver.profile} alt="" />
+          <p>{receiver.username}</p>
+        </Link>
       </div>
       <div className="chat-body">
         {messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.type}`}>
-            <p>{msg.text}</p>
+          <div key={index} className={(msg.senderId==uid)||(msg.receiver==uid)?`message outgoing`:`message incoming`}>
+            <p>{msg.message}</p>
+            <p className="foot">{msg.time}</p>
           </div>
         ))}
       </div>
@@ -32,10 +61,10 @@ const ChatCard = () => {
         <input
           type="text"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(e) =>  setMessage(e.target.value)}
           placeholder="Type your message"
         />
-        <button onClick={handleSend}>Send</button>
+        <button onClick={handleSend}><AiOutlineSend style={{ fontSize: '24px' }} /> </button>
       </div>
     </div>
   );

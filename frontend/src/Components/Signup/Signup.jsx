@@ -7,13 +7,14 @@ import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 import './Signup.scss'
 
 const Signup = () => {
+  const navigate=useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showCPassword, setShowCPassword] = useState(false);
   const [user,setDetails]=useState({
     email:"",
     password:"",
     cpassword:"",
-    usernaname:"",
+    username:"",
     phone:"",
     profile:""
   })
@@ -22,13 +23,14 @@ const Signup = () => {
   }
   const handleSubmit = async(e) => {
     e.preventDefault();
+    console.log(user);
+    
     try {
-      const {data,status}=await axios.post(`${route()}signup`,user,{headers:{"Content-Type":"application/json"}})
+      const {data,status}=await axios.post(`${route()}signup`,user)
     
     if(status===201){
-      localStorage.removeItem('email');
       alert(data.msg);
-      navigate('/login')
+      navigate('/login');
     }
     else{
       alert(data.msg)
@@ -101,6 +103,7 @@ const Signup = () => {
               placeholder="Password"
               className="form-input"
               type={showPassword ? "text" : "password"}
+              onChange={handleChange}
             />
             <button
               type="button"
@@ -121,6 +124,7 @@ const Signup = () => {
               placeholder="Confirm Password"
               className="form-input"
               type={showCPassword ? "text" : "password"}
+              onChange={handleChange}
             />
             <button
               type="button"
@@ -155,6 +159,7 @@ const Signup = () => {
               placeholder="Phone Number"
               className="form-input"
               type="number"
+              onChange={handleChange}
             />
           </div>
         </div>

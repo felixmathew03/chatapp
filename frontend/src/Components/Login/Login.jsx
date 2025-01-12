@@ -32,28 +32,28 @@ const Login = () => {
   };
   return (
     <div className='Login'>
-        <div class="form-container">
-            <p class="title">Login</p> 
-            <form class="form" onSubmit={handleSubmit}>
-                <div class="input-group">
-                    <label for="email">Email</label>
+        <div className="form-container">
+            <p className="title">Login</p> 
+            <form className="form" onSubmit={handleSubmit}>
+                <div className="input-group">
+                    <label htmlFor="email">Email</label>
                     <input type="email" name="email" id="email" onChange={handleChange} placeholder=""/>
                 </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
+                <div className="input-group">
+                    <label htmlFor="password">Password</label>
                     <input type="password" name="password" id="password" onChange={handleChange} placeholder=""/>
-                    <div class="forgot">
+                    <div className="forgot">
                         <a rel="noopener noreferrer" href="/forgotpassword">Forgot Password ?</a>
                     </div>
                 </div>
-                <button type='submit' class="sign">Sign in</button>
+                <button type='submit' className="sign">Sign in</button>
             </form>
-            <div class="social-message">
-                <div class="line"></div>
-                <p class="message">Login with social accounts</p>
-                <div class="line"></div>
+            <div className="social-message">
+                <div className="line"></div>
+                <p className="message">Login with social accounts</p>
+                <div className="line"></div>
             </div>
-            <div class="social-icons">
+            <div className="social-icons">
             <button aria-label="Log in with Google" className="icon">
                 <FaGoogle size={20} color="#fff" />
             </button>
@@ -64,8 +64,8 @@ const Login = () => {
                 <FaGithub size={20} color="#fff" />
             </button>
             </div>
-            <p class="signup">Don't have an account?
-                <a rel="noopener noreferrer" href="/signup" class="">Sign up</a>
+            <p className="signup">Don't have an account?
+                <a rel="noopener noreferrer" href="/signup" className="">Sign up</a>
             </p>
         </div>
     </div>

@@ -4,6 +4,7 @@ import ForgotPass from "./Components/ForgotP/ForgotPass";
 import Signup from "./Components/Signup/Signup";
 import Home from './Components/Home/Home';
 import ChatCard from './Components/ChatCard/ChatCard';
+import ListPeople from './Components/ListPeople/ListPeople';
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
         <Route path='/login' Component={Login}/>
         <Route path='/signup' Component={Signup}/>
         <Route path='/forgotpassword' Component={ForgotPass}/>
-        <Route path='/chatcard' Component={ChatCard}/>
+        <Route path='/chatcard/:id' Component={ChatCard}/>
+        <Route path='/listpeople' Component={ListPeople}/>
       </Routes>
     </BrowserRouter>
   )
