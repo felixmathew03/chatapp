@@ -1,5 +1,6 @@
 import React, { useState,useEffect } from "react";
-import { FaPhoneAlt, FaEnvelope, FaCamera, FaSave } from "react-icons/fa"; 
+import { FaPhoneAlt, FaEnvelope, FaCamera, FaUser } from "react-icons/fa"; 
+import { FiCheck, FiX, FiEdit} from 'react-icons/fi';
 import axios from "axios";
 import route from "../route";
 import './Profile.scss';
@@ -13,6 +14,9 @@ const Profile = () => {
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState(0);
   const [email, setEmail] = useState("");
+  const [isUEdit,setIsUEdit]=useState(false);
+  const [isPEdit,setIsPEdit]=useState(false);
+  const [isEEdit,setIsEEdit]=useState(false);
   useEffect(()=>{
     getDetails();
     },[])
@@ -122,15 +126,19 @@ const Profile = () => {
           </div>
         </div>
         <div className="headings">
+        <FaUser size={20}  className="icon" />
           <input
             type="text"
             value={username}
             onChange={handleNameChange}
             className="edit-input"
+            disabled={!isUEdit}
           />
-          <button className="save-btn" onClick={handleSaveName}>
-            <FaSave />
-          </button>
+          {isUEdit?(<button className="save-btn" >
+            <FiCheck onClick={handleSaveName} color="green"/> <FiX onClick={()=>setIsUEdit(!isUEdit)}  color="red"/> 
+          </button>):<button className="save-btn" >
+          <FiEdit   onClick={()=>setIsUEdit(!isUEdit)}/>
+          </button>}
         </div>
         <div className="contact-info">
           <ul>
@@ -141,10 +149,13 @@ const Profile = () => {
                 value={phone}
                 onChange={handlePhoneChange}
                 className="edit-input"
+                disabled={!isPEdit}
               />
-              <button className="save-btn" onClick={handleSavePhone}>
-                <FaSave />
-              </button>
+              {isPEdit?(<button className="save-btn" >
+            <FiCheck onClick={handleSavePhone} color="green"/> <FiX onClick={()=>setIsPEdit(!isPEdit)}  color="red"/> 
+          </button>):<button className="save-btn" >
+          <FiEdit   onClick={()=>setIsPEdit(!isPEdit)}/>
+          </button>}
             </li>
             <li>
               <FaEnvelope  className="icon" />
@@ -153,10 +164,13 @@ const Profile = () => {
                 value={email}
                 onChange={handleEmailChange}
                 className="edit-input"
+                disabled={!isEEdit}
               />
-              <button className="save-btn" onClick={handleSaveEmail}>
-                <FaSave />
-              </button>
+              {isEEdit?(<button className="save-btn" >
+            <FiCheck onClick={handleSaveEmail} color="green"/> <FiX onClick={()=>setIsEEdit(!isEEdit)}  color="red"/> 
+          </button>):<button className="save-btn" >
+          <FiEdit   onClick={()=>setIsEEdit(!isEEdit)}/>
+          </button>}
             </li>
           </ul>
         </div>

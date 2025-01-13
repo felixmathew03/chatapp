@@ -51,7 +51,7 @@ const ChatCard = () => {
       </div>
       <div className="chat-body">
         {messages.map((msg, index) => (
-          <div key={index} className={(msg.senderId==uid)||(msg.receiver==uid)?`message outgoing`:`message incoming`}>
+          <div key={index} className={(msg.senderId==uid)||(msg.receiver==uid)?`message outgoing`:`message incoming`} >
             <p>{msg.message}</p>
             <p className="foot">{msg.time}</p>
           </div>

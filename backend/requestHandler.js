@@ -63,7 +63,6 @@ export async function editDetails(req,res) {
         const _id=req.user.userId;
         const {...details}=req.body;
         const update=await userSchema.updateOne({_id},{$set:{...details}});
-        console.log(update);
         return res.status(201).send({msg:"success"});
     } catch (error) {
         return res.status(404).send({msg:"error"})

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Bebas+Neue&family=DM+Serif+Text:ital@0;1&family=Dancing+Script:wght@400..700&family=Lilita+One&family=Oswald:wght@200..700&family=Pacifico&family=Squada+One&family=Ultra&display=swap');
 nav{
     height: 8vh;
     width: 100%;
@@ -9,10 +10,12 @@ nav{
     .navbar-logo{
         text-decoration: none;
         color: #ffffff;
+        text-shadow: 2px 2px 4px rgb(0, 0, 0);
         display: flex;
         align-items: center;
         gap: 8px;
         margin-left: 2%;
+        font-family: "Lilita One", serif;
         img{
             width: 35px;
             height: 35px;

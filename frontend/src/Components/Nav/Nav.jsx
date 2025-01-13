@@ -37,7 +37,7 @@ const Nav = () => {
     <nav>
         <Link to={'/'} className="navbar-logo">
                 <img src="/img/logo.jpg" alt="Logo" className="logo-image" />
-                <h1 className="website-name">Conversa</h1>
+                <h1 className="website-name">CONVERSA !</h1>
         </Link>
         <div className="user">
             <h4>{user.username}</h4>

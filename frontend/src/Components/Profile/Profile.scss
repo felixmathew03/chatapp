@@ -53,7 +53,7 @@
             transform: scale(0.5);
             cursor: pointer;
             &:hover {
-              transform: scale(1.4);
+              transform: scale(1,2);
               z-index: -1;
             }
           }
@@ -94,13 +94,25 @@
         }
   
       }
-  
       .headings {
         z-index: 40;
-        display: flex;
-        justify-content: space-around;
-        align-items: baseline;
-  
+        display: grid;
+        grid-template-columns: auto 1fr auto; /* User icon, input, and buttons */
+        gap: 10px;
+        align-items: center; /* Vertically align the elements */
+        justify-items: center; /* Center horizontally */
+      
+        .icon {
+          width: 25px;
+          height: 25px;
+          fill: #434955;
+          transition: fill 0.3s;
+      
+          &:hover {
+            fill: #58b0e0;
+          }
+        }
+      
         .edit-input {
           font-size: 1.25rem;
           font-weight: 600;
@@ -109,15 +121,18 @@
           border: none;
           border-bottom: 2px solid #434955;
           outline: none;
-          text-align: center;
           width: 100%;
           margin-top: 1rem;
-  
+      
+          &:disabled {
+            border-bottom: none;
+          }
+      
           &:focus {
             border-color: #58b0e0;
           }
         }
-  
+      
         .save-btn {
           color: #58b0e0;
           cursor: pointer;
@@ -125,42 +140,46 @@
           background: transparent;
           border: none;
           transition: color 0.3s;
-  
-          &:hover {
-            color: #434955;
-          }
+          display: flex;
+          align-items: center;
+          gap: 10px;
         }
       }
-  
+      
       .contact-info {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem; /* Space between each contact info item */
         width: 100%;
-        display: flex;
-        justify-content: space-around;
-  
+        justify-items: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+      
         ul {
           list-style-type: none;
-          display: flex;
-          flex-direction: column;
+          padding: 0;
+          display: grid;
           gap: 0.8rem;
-          padding-bottom: 1rem;
-  
+          justify-items: center; /* Center items horizontally */
+          align-items: center; /* Center items vertically */
+      
           li {
-            display: flex;
-            justify-content: space-around;
-            align-items: baseline;
+            display: grid;
+            grid-template-columns: auto 1fr auto; /* Icon, input, and buttons */
+            align-items: center;
+            justify-items: center; /* Center items horizontally */
             gap: 0.5rem;
-  
+      
             .icon {
               width: 25px;
               height: 25px;
               fill: #434955;
               transition: fill 0.3s;
-  
+      
               &:hover {
                 fill: #58b0e0;
               }
             }
-  
+      
             .save-btn {
               color: #58b0e0;
               cursor: pointer;
@@ -168,12 +187,11 @@
               background: transparent;
               border: none;
               transition: color 0.3s;
-  
-              &:hover {
-                color: #434955;
-              }
+              display: flex;
+              align-items: center;
+              gap: 10px;
             }
-  
+      
             .edit-input {
               font-size: 1.25rem;
               font-weight: 600;
@@ -186,7 +204,11 @@
               text-align: left;
               width: 100%;
               margin-top: 0.5rem;
-  
+      
+              &:disabled {
+                border-bottom: none;
+              }
+      
               &:focus {
                 border-color: #58b0e0;
               }
@@ -194,14 +216,15 @@
           }
         }
       }
-  
+      
+      
       .divider {
         width: 100%;
         height: 3px;
         background-color: #58b0e0;
         transition: all 0.3s;
         &:hover {
-          height: 5px;
+          height: 10px;
         }
       }
     }
