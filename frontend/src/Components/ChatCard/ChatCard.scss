@@ -6,9 +6,10 @@
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-display: flex;
-flex-direction: column;
-justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   .chat-header {
     padding: 10px;
     background-color: #ebf0f8;
@@ -26,7 +27,7 @@ justify-content: space-between;
       .back-icon {
         font-size: 20px;
       }
-      img{
+      img {
         width: 40px;
         height: 40px;
         border-radius: 50%;
@@ -48,14 +49,14 @@ justify-content: space-between;
       border-radius: 5px;
       animation: chatAnimation 0.3s ease-in-out;
       animation-fill-mode: both;
-
+      position: relative;
       &.incoming {
         background-color: #e1e1e1;
       }
 
       &.outgoing {
         background-color: #f2f2f2;
-        text-align: right;  
+        text-align: right;
       }
 
       p {
@@ -63,9 +64,41 @@ justify-content: space-between;
         color: #333;
         margin: 0;
       }
-      .foot{
+      .foot {
         font-size: 12px;
         color: rgb(95, 98, 113);
+      }
+      .popover {
+        position: absolute;
+        background-color: #fff;
+        right: 20%;
+        bottom: 2%;
+        padding: 1%;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+    
+        button {
+          padding: 2px;
+          margin: 5px;
+          border: none;
+          border-radius: 3px;
+          cursor: pointer;
+          font-size: 16px;
+    
+          &:first-child { 
+            color: #b50a0a;
+          }
+    
+          &:last-child {
+            color: rgb(10, 1, 1);
+          }
+    
+          &:hover {
+            opacity: 0.8;
+          }
+        }
       }
     }
   }
@@ -74,21 +107,18 @@ justify-content: space-between;
     padding: 10px;
     background-color: #f2f2f2;
     display: flex;
-    align-items: center;  // Center the input and button vertically
-    height: 60px;  // Adjust height to provide space for content
-    
-    // Input styling
+    align-items: center;
+    height: 60px;
     input[type="text"] {
       flex-grow: 1;
-      padding: 8px 12px;  // Increase padding for a better look
+      padding: 8px 12px;
       border: none;
       border-radius: 3px;
-      font-size: 14px;  // Adjust font size for readability
-      margin-right: 10px;  // Space between input and button
-      background-color: #fff; // Make input background white
+      font-size: 14px;
+      margin-right: 10px;
+      background-color: #fff;
     }
-  
-    // Button styling
+
     button {
       padding: 8px 12px;
       border: none;
@@ -100,19 +130,13 @@ justify-content: space-between;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 3px;  // Match the button radius with the input
-      
+      border-radius: 3px;
+
       &:hover {
         background-color: #0f4a9d;
       }
-      
-      // Optional: Remove the text and only display the icon
-      .send-icon {
-        font-size: 20px;  // Adjust icon size if needed
-      }
     }
   }
-  
 
   @keyframes chatAnimation {
     0% {
@@ -133,4 +157,5 @@ justify-content: space-between;
   .message:nth-child(odd) {
     animation-delay: 0.3s;
   }
+  
 }

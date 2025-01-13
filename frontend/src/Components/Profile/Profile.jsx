@@ -39,6 +39,7 @@ const Profile = () => {
   // Edit functions
   const handleImageChange = async(e) => {
     const profile=await convertToBase64(e.target.files[0]);
+    setProfile(profile)
     const {status,data}=await axios.put(`${route()}editdetails`,{profile},{headers:{"Authorization":`Bearer ${value}`}});
     if (status==201) {
         if (data.msg=="success") {

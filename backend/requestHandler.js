@@ -113,6 +113,21 @@ export async function addMessage(req,res) {
     }
 }
 
+export async function deleteMessage(req,res) {
+    try {
+        const {_id}=req.params;
+        const senderId=req.user.userId;
+        const msg=await messageSchema.findOne({_id,senderId});
+        
+        if(!msg)
+           return res.status(404).send({msg:"Cannot delete others message"});
+        const deletemessage=await messageSchema.deleteOne({$and:[{_id},{senderId}]})
+        return res.status(201).send({msg:"success"});
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+
 export async function signUp(req,res) {
   try {
       const {email,password,username,cpassword,phone,profile}=req.body;
