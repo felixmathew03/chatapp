@@ -128,6 +128,20 @@ export async function deleteMessage(req,res) {
     }
 }
 
+export async function userProfile(req,res) {
+    try {
+        const _id=req.user.userId;
+        const {id}=req.params;
+        const user=await userSchema.findOne({_id},{password:0});
+        if(!user)
+           return res.status(403).send({msg:"Login to continue"});
+        const userp=await userSchema.findOne({_id:id},{password:0});
+        return res.status(200).send(userp);
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+
 export async function signUp(req,res) {
   try {
       const {email,password,username,cpassword,phone,profile}=req.body;

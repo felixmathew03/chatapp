@@ -16,5 +16,6 @@ router.route('/chat/:rid').get(Auth,user.chat);
 router.route("/addmessage/:rid").post(Auth,user.addMessage);
 router.route("/editdetails").put(Auth,user.editDetails);
 router.route("/deletemessage/:_id").delete(Auth,user.deleteMessage);
+router.route('/userprofile/:id').get(Auth,user.userProfile);
 
 export default router;

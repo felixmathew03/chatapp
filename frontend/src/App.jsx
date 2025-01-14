@@ -7,6 +7,7 @@ import ChatCard from './Components/ChatCard/ChatCard';
 import ListPeople from './Components/ListPeople/ListPeople';
 import NewPassword from './Components/NewPass/NewPassword';
 import Profile from './Components/Profile/Profile';
+import UserProfile from './Components/UserProfile/UserProfile';
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ function App() {
         <Route path='/listpeople' Component={ListPeople}/>
         <Route path='/newpassword' Component={NewPassword}/>
         <Route path='/profile' Component={Profile}/>
+        <Route path='/userprofile/:id' Component={UserProfile}/>
       </Routes>
     </BrowserRouter>
   )
