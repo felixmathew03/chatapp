@@ -93,11 +93,12 @@ const ChatCard = () => {
   return (
     <div className="chat-card">
       <div className="chat-header">
-        <Link to={'/'} className="h2">
-          <FiArrowLeft className="back-icon" />
-          <img src={receiver.profile} alt="" />
+         <div className="h2">
+         <Link to={'/'}><FiArrowLeft className="back-icon" /></Link>
+          
+          <Link to={`/receiver/${receiver._id}`}><img src={receiver.profile} alt="" /></Link>
           <p>{receiver.username}</p>
-        </Link>
+        </div>
       </div>
       <div className="chat-body">
         {messages.map((msg, index) => (

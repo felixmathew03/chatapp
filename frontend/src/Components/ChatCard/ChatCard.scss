@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap');
 .chat-card {
   width: 60%;
   margin: auto;
@@ -12,18 +13,21 @@
 
   .chat-header {
     padding: 10px;
-    background-color: #ebf0f8;
+    background-color: #487aca;
     display: flex;
     align-items: center;
     width: 100%;
     height: 5%;
     .h2 {
-      text-decoration: none;
+      a{
+        color: #ffffff;
+        text-decoration: none;
+      }
       display: flex;
       align-items: center;
       gap: 10px;
       font-size: 16px;
-      color: #333;
+      color: #ffffff;
       .back-icon {
         font-size: 20px;
       }
@@ -42,36 +46,53 @@
     height: 90%;
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: flex-end; /* Keep messages at the bottom */
+    background-color: #0d0725;
     .message {
       margin-bottom: 10px;
       padding: 10px;
-      border-radius: 5px;
+      border-radius: 8px;
       animation: chatAnimation 0.3s ease-in-out;
       animation-fill-mode: both;
       position: relative;
+      font-family: "Jura", serif;
+      font-weight: 600;
+      max-width: 70%; /* Set a max-width to avoid messages stretching too wide */
+      width: fit-content; /* Adjust width based on content */
+    
       &.incoming {
-        background-color: #e1e1e1;
+        background-color: #6f7b9a;
+        align-self: flex-start; /* Align to the left */
+        p{
+          color: white;
+        }
+        .foot{
+          color: #f2f2f2;
+        }
       }
-
+    
       &.outgoing {
-        background-color: #f2f2f2;
+        background-color: #c6d8fd;
+        align-self: flex-end; /* Align to the right */
         text-align: right;
       }
-
+    
       p {
         font-size: 18px;
         color: #333;
+        font-weight: 700;
         margin: 0;
       }
+      
       .foot {
-        font-size: 12px;
-        color: rgb(95, 98, 113);
+        font-size: 10px;
+        color: rgb(93, 95, 103);
       }
+    
       .popover {
         position: absolute;
         background-color: #fff;
-        right: 20%;
+        left: 1%;
         bottom: 2%;
         padding: 1%;
         border-radius: 5px;
@@ -102,10 +123,11 @@
       }
     }
   }
+  
 
   .chat-footer {
     padding: 10px;
-    background-color: #f2f2f2;
+    background-color: #b6cff8;
     display: flex;
     align-items: center;
     height: 60px;
@@ -122,8 +144,8 @@
     button {
       padding: 8px 12px;
       border: none;
-      background-color: #4285f4;
-      color: #fff;
+      background-color: #5a6bea;
+      color: #ffffff;
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s;
