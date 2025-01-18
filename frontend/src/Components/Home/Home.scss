@@ -35,6 +35,7 @@
                 object-position: top;
             }
             .right{
+                width: 70%;
                 height: 100%;
                 display: flex;
                 align-items: left;
@@ -44,6 +45,9 @@
                     font-weight: 600;
                     font-size: small;
                     color: #252cff;
+                }
+                .cfoot{
+                    margin-left: 2%;
                 }
                 .msg{
                     font-size: small;

@@ -40,7 +40,8 @@ export async function home(req,res) {
                 return await userSchema.findOne({ _id: receiver.senderId },{username:1,profile:1});
         });
         const members = await Promise.all(chatMemberPromises);
-        const chatmembers=[...new Map(members.map(member => [member._id, member])).values()]
+        const chatmembers=Array.from(new Map(members.map(member => [member.username, member])).values()).reverse()  
+        
         const countPromises=chatmembers.map(async(member)=>{
             return await messageSchema.countDocuments({senderId:member._id,seen:false})
         })
@@ -98,6 +99,12 @@ export async function chat(req,res) {
         const user=await userSchema.findOne({_id:sid});
         if(!user)
            return res.status(403).send({msg:"Login to continue"});
+        const unseen=await messageSchema.find({senderId:rid,receiverId:sid,seen:false});
+        if(unseen)
+        {
+            const updateunseen=await messageSchema.updateMany({senderId:rid,receiverId:sid},{$set:{seen:true}});
+        }
+        
         const receiver=await userSchema.findOne({_id:rid},{profile:1,username:1})
         const chats=await messageSchema.find({$or:[{senderId:sid,receiverId:rid},{senderId:rid,receiverId:sid}]});
         
