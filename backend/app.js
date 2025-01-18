@@ -8,6 +8,7 @@ const app=express();
 app.use(cors())
 app.use(express.json({limit:'50mb'}))
 app.use("/api",router)
+app.use(express.static("../frontend/dist"))
 
 connection().then(()=>{
     app.listen(process.env.PORT,()=>{

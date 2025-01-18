@@ -39,8 +39,17 @@ export async function home(req,res) {
             if(receiver.receiverId==_id)
                 return await userSchema.findOne({ _id: receiver.senderId },{username:1,profile:1});
         });
-        const chatMembers = await Promise.all(chatMemberPromises);
-        return res.status(200).send({chatMembers});
+        const members = await Promise.all(chatMemberPromises);
+        const chatmembers=[...new Map(members.map(member => [member._id, member])).values()]
+        const countPromises=chatmembers.map(async(member)=>{
+            return await messageSchema.countDocuments({senderId:member._id,seen:false})
+        })
+        const counts=await Promise.all(countPromises);
+        const messagePromises=chatmembers.map(async(member)=>{
+            return await messageSchema.findOne({$or:[{senderId:_id,receiverId:member._id},{senderId:member._id,receiverId:_id}]},{message:1,seen:1}).sort({ _id: -1 })
+        })
+        const lmessages=await Promise.all(messagePromises);
+        return res.status(200).send({chatmembers,counts,lmessages});
     } catch (error) {
         return res.status(404).send({msg:"error"})
     }
@@ -106,7 +115,7 @@ export async function addMessage(req,res) {
         const chatmember=await chatMemberSchema.findOne({senderId:sid,receiverId:rid});
         if(!chatmember)
            await chatMemberSchema.create({senderId:sid,receiverId:rid})
-        const chats=await messageSchema.create({senderId:sid,receiverId:rid,message,date,time});
+        const chats=await messageSchema.create({senderId:sid,receiverId:rid,message,date,time,seen:false});
         return res.status(201).send({msg:"success"});
     } catch (error) {
         return res.status(404).send({msg:"error"})

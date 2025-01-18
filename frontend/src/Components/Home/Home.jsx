@@ -10,6 +10,8 @@ const Home = () => {
     const value=localStorage.getItem("Auth");
     const navigate=useNavigate();
     const [chatMembers,setChatMembers]=useState([]);
+    const [counts,setCounts]=useState([]);
+    const [lmessages,setLmessages]=useState([]);
     useEffect(()=>{
         getDetails();
     },[])
@@ -17,7 +19,9 @@ const Home = () => {
         try {
           const {status,data}=await axios.get(`${route()}home`,{headers:{"Authorization":`Bearer ${value}`}})
         if(status==200){
-            setChatMembers([...new Map(data.chatMembers.map(member => [member._id, member])).values()].reverse());
+            setChatMembers(data.chatmembers);
+            setCounts(data.counts);
+            setLmessages(data.lmessages)
         }else{
             alert(data.msg);
             navigate('/login')
@@ -26,6 +30,7 @@ const Home = () => {
           navigate('/login')
         }
     }
+    (lmessages[0]&&console.log(lmessages[0].seen))
     
   return (
     <div className='Home'>
@@ -33,7 +38,10 @@ const Home = () => {
       <div className="container">
         {chatMembers.map((member,ind)=> <Link to={`/chatcard/${member._id}`} className="content" key={ind}>
                 <img src={member.profile} alt={member.username} />
-                <p>{member.username}</p>
+                <div className="right">
+                  <p>{member.username} {counts[ind]>0&&(<span className='count'>({counts[ind]})</span>)}</p>
+                  <p className="cfoot">{(lmessages[ind].seen)?<span className='smsg '>{lmessages[ind].message}</span>:<span className='msg'>{lmessages[ind].message}</span>}</p>
+                  </div>
             </Link>
         )}
       </div>

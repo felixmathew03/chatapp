@@ -17,7 +17,7 @@
     display: flex;
     align-items: center;
     width: 100%;
-    height: 5%;
+    height: 5vh;
     .h2 {
       a{
         color: #ffffff;
@@ -43,11 +43,13 @@
 
   .chat-body {
     padding: 20px;
-    height: 90%;
+    height: 87vh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* Keep messages at the bottom */
+    justify-content:baseline; /* Keep messages at the bottom */
   background-color: #191a1a;
+  overflow: scroll;
+  scrollbar-width: none;
     .message {
       margin-bottom: 10px;
       padding: 10px;
@@ -130,7 +132,7 @@
     background-color: #b6cff8;
     display: flex;
     align-items: center;
-    height: 60px;
+    height: 8vh;
     input[type="text"] {
       flex-grow: 1;
       padding: 8px 12px;
