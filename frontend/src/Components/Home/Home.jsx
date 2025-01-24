@@ -21,6 +21,8 @@ const Home = () => {
         if(status==200){
             setChatMembers(data.chatmembers);
             setCounts(data.counts);
+            console.log(data.counts);
+            
             setLmessages(data.lmessages)
         }else{
             alert(data.msg);
@@ -30,7 +32,6 @@ const Home = () => {
           navigate('/login')
         }
     }
-    (lmessages[0]&&console.log(lmessages[0].seen))
     
   return (
     <div className='Home'>

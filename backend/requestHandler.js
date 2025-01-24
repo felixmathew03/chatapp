@@ -5,8 +5,8 @@ const {sign}=pkg;
 const transporter = nodemailer.createTransport({
    service:"gmail",
     auth: {
-      user: "felixmathewt@gmail.com",
-      pass: "qwvy rccu lwjz rmal",
+      user: "",
+      pass: "",
     },
 });
 
@@ -212,59 +212,59 @@ export async function forgotPassword(req,res) {
           if(!user)
               res.status(403).send({msg:"User not found"});
       // send mail with defined transport object
-        const info = await transporter.sendMail({
-            from: `"Hai 👻" <${email}>`, // sender address
-            to: `${email}`, // list of receivers
-            subject: "Change Password", // Subject line
-            text: "Confirm your account", // plain text body
-            html: `<!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Account Verification</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f4f4f4;
-                color: #333;
-            }
-            .email-container {
-                width: 100%;
-                max-width: 600px;
-                margin: 0 auto;
-                background-color: #fff;
-                border: 1px solid #ddd;
-                padding: 20px;
-                border-radius: 8px;
-                text-align: center;
-            }
-            .btn {
-                display: inline-block;
-                background-color: #4CAF50;
-                color: #fff;
-                text-decoration: none;
-                padding: 15px 30px;
-                margin-top: 20px;
-                border-radius: 4px;
-                font-size: 18px;
-                text-align: center;
-            }
-        </style>
-      </head>
-      <body>
+    //     const info = await transporter.sendMail({
+    //         from: `"Hai 👻" <${email}>`, // sender address
+    //         to: `${email}`, // list of receivers
+    //         subject: "Change Password", // Subject line
+    //         text: "Confirm your account", // plain text body
+    //         html: `<!DOCTYPE html>
+    //   <html lang="en">
+    //   <head>
+    //     <meta charset="UTF-8">
+    //     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    //     <title>Account Verification</title>
+    //     <style>
+    //         body {
+    //             font-family: Arial, sans-serif;
+    //             margin: 0;
+    //             padding: 0;
+    //             background-color: #f4f4f4;
+    //             color: #333;
+    //         }
+    //         .email-container {
+    //             width: 100%;
+    //             max-width: 600px;
+    //             margin: 0 auto;
+    //             background-color: #fff;
+    //             border: 1px solid #ddd;
+    //             padding: 20px;
+    //             border-radius: 8px;
+    //             text-align: center;
+    //         }
+    //         .btn {
+    //             display: inline-block;
+    //             background-color: #4CAF50;
+    //             color: #fff;
+    //             text-decoration: none;
+    //             padding: 15px 30px;
+    //             margin-top: 20px;
+    //             border-radius: 4px;
+    //             font-size: 18px;
+    //             text-align: center;
+    //         }
+    //     </style>
+    //   </head>
+    //   <body>
   
-        <div class="email-container">
-            <p>Hello,</p>
-            <p>Please confirm your email address by clicking the button below and change password.</p>
-            <a href="http://localhost:5173/newpassword" class="btn">Change Your Password</a>
-        </div>
+    //     <div class="email-container">
+    //         <p>Hello,</p>
+    //         <p>Please confirm your email address by clicking the button below and change password.</p>
+    //         <a href="http://localhost:5173/newpassword" class="btn">Change Your Password</a>
+    //     </div>
   
-      </body>
-      </html>`, // html body
-        });
+    //   </body>
+    //   </html>`, // html body
+    //     });
       // console.log("Message sent: %s", info.messageId);
       // Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
   
