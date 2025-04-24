@@ -7,6 +7,10 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { AiOutlineSend } from 'react-icons/ai';
 import { AiOutlineDelete } from 'react-icons/ai'; 
 import { FiX} from 'react-icons/fi';
+import { useRef } from 'react';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:3000'); // Match your backend URL
 
 const ChatCard = () => {
   const value = localStorage.getItem('Auth');
@@ -21,8 +25,22 @@ const ChatCard = () => {
 
   useEffect(() => {
     getDetails();
-  }, []);
-
+  
+    // Listen for real-time messages
+    socket.on('receiveMessage', (msg) => {
+      if (
+        (msg.senderId === receiver._id && msg.receiver === uid) ||
+        (msg.senderId === uid && msg.receiver === receiver._id)
+      ) {
+        setMessages(prev => [...prev, msg]);
+      }
+    });
+  
+    // Clean up on unmount
+    return () => {
+      socket.off('receiveMessage');
+    };
+  }, [uid, receiver]);
   const getDetails = async () => {
     const { status, data } = await axios.get(`${route()}chat/${id}`, {
       headers: { Authorization: `Bearer ${value}` },
@@ -48,10 +66,22 @@ const ChatCard = () => {
       );
       if (status === 201) {
         if (data.msg === 'success') {
-          getDetails();
+          const sentMsg = {
+            message,
+            time,
+            date,
+            senderId: uid,
+            receiver: receiver._id
+          };
+      
+          // Emit message via Socket.IO
+          socket.emit('sendMessage', sentMsg);
+      
+          // Optionally update UI optimistically
+          setMessages(prev => [...prev, sentMsg]);
         }
+        setMessage('');
       }
-      setMessage('');
     }
   };
   // Detect long press

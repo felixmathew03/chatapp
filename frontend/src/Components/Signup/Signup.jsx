@@ -23,8 +23,6 @@ const Signup = () => {
   }
   const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log(user);
-    
     try {
       const {data,status}=await axios.post(`${route()}signup`,user)
     

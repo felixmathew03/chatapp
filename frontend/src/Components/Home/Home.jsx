@@ -21,8 +21,6 @@ const Home = () => {
         if(status==200){
             setChatMembers(data.chatmembers);
             setCounts(data.counts);
-            console.log(data.counts);
-            
             setLmessages(data.lmessages)
         }else{
             alert(data.msg);
