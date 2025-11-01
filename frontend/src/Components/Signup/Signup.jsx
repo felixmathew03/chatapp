@@ -24,7 +24,7 @@ const Signup = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {
-      const {data,status}=await axios.post(`${route()}signup`,user)
+      const {data,status}=await axios.post(`${route()}auth/signup`,user)
     
     if(status===201){
       alert(data.msg);

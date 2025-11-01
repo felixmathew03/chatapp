@@ -12,9 +12,8 @@ import io from 'socket.io-client';
 
 const socket = io('http://localhost:3000'); // Match your backend URL
 
-const ChatCard = () => {
+const ChatCard = ({id,setChatCardId,setIsChatOpen}) => {
   const value = localStorage.getItem('Auth');
-  const { id } = useParams();
   const [uid, setUid] = useState('');
   const [message, setMessage] = useState('');
   const [receiver, setReceiver] = useState({});
@@ -42,7 +41,7 @@ const ChatCard = () => {
     };
   }, [uid, receiver]);
   const getDetails = async () => {
-    const { status, data } = await axios.get(`${route()}chat/${id}`, {
+    const { status, data } = await axios.get(`${route()}message/chat/${id}`, {
       headers: { Authorization: `Bearer ${value}` },
     });
     if (status === 200) {
@@ -60,7 +59,7 @@ const ChatCard = () => {
       const currentDate = new Date();
       const [date, time] = currentDate.toLocaleString().split(', ');
       const { status, data } = await axios.post(
-        `${route()}addmessage/${id}`,
+        `${route()}message/addmessage/${id}`,
         { message, date, time },
         { headers: { Authorization: `Bearer ${value}` } }
       );
@@ -103,7 +102,7 @@ const ChatCard = () => {
 
   const handleDelete = async () => {
     try {
-      const { status, data } = await axios.delete(`${route()}deletemessage/${longPressMsg._id}`, {
+      const { status, data } = await axios.delete(`${route()}message/deletemessage/${longPressMsg._id}`, {
         headers: { Authorization: `Bearer ${value}` },
       });
       if (status === 201 && data.msg === 'success') {
@@ -120,11 +119,15 @@ const ChatCard = () => {
     setShowPopover(false);
   };
 
+  const handleBack = () => {
+    setChatCardId(null);
+    setIsChatOpen(false);
+  };
   return (
     <div className="chat-card">
       <div className="chat-header">
          <div className="h2">
-         <Link to={'/'}><FiArrowLeft className="back-icon" /></Link>
+         <button onClick={handleBack}><FiArrowLeft className="back-icon" /></button>
           
           <Link to={`/userprofile/${receiver._id}`}><img src={receiver.profile} alt="" /></Link>
           <p>{receiver.username}</p>
@@ -161,9 +164,9 @@ const ChatCard = () => {
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type your message"
+          placeholder="Type your message here..."
         />
-        <button onClick={handleSend}><AiOutlineSend style={{ fontSize: '24px' }} /></button>
+        <button type='submit' onClick={handleSend}><AiOutlineSend style={{ fontSize: '24px' }} /></button>
       </div>
       
     </div>

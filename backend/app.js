@@ -1,7 +1,7 @@
 import express from "express";
 import connection from "./connection.js";
 import env from "dotenv";
-import router from "./router.js";
+import router from "./routes/router.js";
 import cors from "cors";
 import { Server } from "socket.io";
 import http from "http";

@@ -17,7 +17,7 @@ const NewPassword = () => {
       const handleSubmit=async(e)=>{
         e.preventDefault();
         try {
-            const { status, data } = await axios.post(`${route()}changepassword`, {...passwordDetails,email});
+            const { status, data } = await axios.post(`${route()}auth/changepassword`, {...passwordDetails,email});
             if (status === 201) {
               localStorage.removeItem("email");
               alert(data.msg)

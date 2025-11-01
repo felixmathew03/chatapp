@@ -1,9 +1,9 @@
 // Variables (optional for customization)
-$primary-color: rgb(165, 202, 244);
-$text-color: rgb(228, 227, 248);
+$primary-color: rgb(59, 67, 76);
+$text-color: rgb(9, 6, 83);
 $border-color: rgba(55, 65, 81, 1);
-$label-color: #cbced7;
-$line-color: rgb(165, 202, 244);
+$label-color: #2c3759;
+$line-color: rgb(87, 97, 109);
 
 // Main container for the form
 .Login{
@@ -12,11 +12,11 @@ $line-color: rgb(165, 202, 244);
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(250, 237, 237) ;
+    background-color: #1e293b;
     .form-container {
         width: 320px;
         border-radius: 0.75rem;
-        background-color: rgb(25, 34, 55);
+        background-color: rgb(255, 255, 255);
         padding: 2rem;
         color: $text-color;
         .title {
@@ -88,6 +88,7 @@ $line-color: rgb(165, 202, 244);
             border: none;
             border-radius: 0.375rem;
             font-weight: 600;
+            color: #eeeff3;
         }
         }
     

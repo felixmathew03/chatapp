@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 });
 
 import userSchema from './models/user.model.js';
-import chatMemberSchema from "./models/chatmember.mode.js";
+import chatMemberSchema from "./models/chatmember.model.js";
 import messageSchema from './models/message.model.js';
 
 export async function nav(req,res) {

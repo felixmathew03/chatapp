@@ -13,7 +13,7 @@ const ForgotPass = () => {
   };
   const handleSubmit = async(event) => {
     event.preventDefault(); 
-    const {status,data}=await axios.post(`${route()}forgotpassword`,{email},{Headers:{"Content-Type":"application/json"}});
+    const {status,data}=await axios.post(`${route()}auth/forgotpassword`,{email},{Headers:{"Content-Type":"application/json"}});
     
     if(status===201){
       localStorage.setItem('email',email);

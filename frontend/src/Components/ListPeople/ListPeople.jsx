@@ -14,7 +14,7 @@ const ListPeople = () => {
     },[])
     const getDetails=async()=>{
         try {
-          const {status,data}=await axios.get(`${route()}listpeople`,{headers:{"Authorization":`Bearer ${value}`}})
+          const {status,data}=await axios.get(`${route()}user/listpeople`,{headers:{"Authorization":`Bearer ${value}`}})
         if(status==200){
             setPeople(data.people)
         }else{

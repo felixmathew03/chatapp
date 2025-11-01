@@ -18,7 +18,7 @@ const UserProfile = () => {
 
   const getDetails = async () => {
     try {
-      const { status, data } = await axios.get(`${route()}userprofile/${id}`, {
+      const { status, data } = await axios.get(`${route()}user/userprofile/${id}`, {
         headers: { "Authorization": `Bearer ${value}` }
       });
       if (status === 200) {

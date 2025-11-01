@@ -7,7 +7,7 @@ import './Profile.scss';
 import Nav from "../Nav/Nav";
 import { useNavigate } from "react-router-dom";
 
-const Profile = () => {
+const Profile = ({setIsProfileOpen}) => {
   const navigate=useNavigate();
   const value=localStorage.getItem("Auth")
   const [profile, setProfile] = useState("");
@@ -22,7 +22,7 @@ const Profile = () => {
     },[])
     const getDetails=async()=>{
         try {
-        const {status,data}=await axios.get(`${route()}profile`,{headers:{"Authorization":`Bearer ${value}`}})
+        const {status,data}=await axios.get(`${route()}user/profile`,{headers:{"Authorization":`Bearer ${value}`}})
         if(status==200){
             setEmail(data.email);
             setUsername(data.username);
@@ -40,7 +40,7 @@ const Profile = () => {
   const handleImageChange = async(e) => {
     const profile=await convertToBase64(e.target.files[0]);
     setProfile(profile)
-    const {status,data}=await axios.put(`${route()}editdetails`,{profile},{headers:{"Authorization":`Bearer ${value}`}});
+    const {status,data}=await axios.put(`${route()}user/editdetails`,{profile},{headers:{"Authorization":`Bearer ${value}`}});
     if (status==201) {
         if (data.msg=="success") {
             alert("Photo edited");
@@ -74,7 +74,7 @@ const Profile = () => {
 
   // Save changes functions
   const handleSaveName =async () => {
-    const {status,data}=await axios.put(`${route()}editdetails`,{username},{headers:{"Authorization":`Bearer ${value}`}});
+    const {status,data}=await axios.put(`${route()}user/editdetails`,{username},{headers:{"Authorization":`Bearer ${value}`}});
       if (status==201) {
         if (data.msg=="success") {
             alert("Name edited");
@@ -84,7 +84,7 @@ const Profile = () => {
   };
 
   const handleSavePhone = async() => {
-    const {status,data}=await axios.put(`${route()}editdetails`,{phone},{headers:{"Authorization":`Bearer ${value}`}});
+    const {status,data}=await axios.put(`${route()}user/editdetails`,{phone},{headers:{"Authorization":`Bearer ${value}`}});
       if (status==201) {
         if (data.msg=="success") {
             alert("Phone edited");
@@ -94,7 +94,7 @@ const Profile = () => {
   };
 
   const handleSaveEmail = async() => {
-    const {status,data}=await axios.put(`${route()}editdetails`,{phone},{headers:{"Authorization":`Bearer ${value}`}});
+    const {status,data}=await axios.put(`${route()}user/editdetails`,{phone},{headers:{"Authorization":`Bearer ${value}`}});
       if (status==201) {
         if (data.msg=="success") {
             alert("Phone edited");
@@ -102,11 +102,15 @@ const Profile = () => {
         }
       }
   };
-
+const handleCancel=()=>{
+  console.log("hai");
+  
+    setIsProfileOpen(false);
+}
   return (
     <div className="Profile">
-      <Nav />
       <div className="profile-card">
+        <img src="img/close_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg" className="close" alt="" onClick={handleCancel}/>
         <div className="avatar">
           <div className="img_container">
             <div className="hover-effect"></div>

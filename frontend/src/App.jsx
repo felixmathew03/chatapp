@@ -16,10 +16,8 @@ function App() {
         <Route path='/login' Component={Login}/>
         <Route path='/signup' Component={Signup}/>
         <Route path='/forgotpassword' Component={ForgotPass}/>
-        <Route path='/chatcard/:id' Component={ChatCard}/>
         <Route path='/listpeople' Component={ListPeople}/>
         <Route path='/newpassword' Component={NewPassword}/>
-        <Route path='/profile' Component={Profile}/>
         <Route path='/userprofile/:id' Component={UserProfile}/>
       </Routes>
     </BrowserRouter>

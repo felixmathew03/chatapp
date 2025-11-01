@@ -14,7 +14,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { status, data } = await axios.post(`${route()}signin`, loginDetails, { Headers: { "Content-Type": "application/json" } });
+      const { status, data } = await axios.post(`${route()}auth/signin`, loginDetails, { Headers: { "Content-Type": "application/json" } });
       if (status === 200) {
         localStorage.setItem("Auth", data.token);
         alert(data.msg)
