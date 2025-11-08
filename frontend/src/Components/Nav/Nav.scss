@@ -129,10 +129,25 @@
     }
   }
 }
-
+.sidebar-actions button:hover {
+  background: rgba(59, 165, 93, 0.15);
+  border-radius: 6px;
+  color: #3ba55d;
+  transition: all 0.25s ease;
+}
 /* Fade animation for overlay */
 @keyframes fadeIn {
   to {
     opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+@media (max-width: 600px) {
+  .sidebar {
+    width: 100%;
   }
 }

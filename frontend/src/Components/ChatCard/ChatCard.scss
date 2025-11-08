@@ -46,11 +46,17 @@
     padding: 20px;
     height: 87vh;
     display: flex;
-    flex-direction: column;
-    justify-content:baseline; /* Keep messages at the bottom */
+    flex-direction: column-reverse;
+    justify-content:baseline; 
   background-color: #191a1a;
   overflow: scroll;
   scrollbar-width: none;
+    .messages {
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
     .message {
       margin-bottom: 10px;
       padding: 10px;
@@ -136,13 +142,20 @@
     height: 8vh;
     input[type="text"] {
       flex-grow: 1;
-      padding: 8px 12px;
+      padding: 6px 12px;
       height: 60%;
       border: none;
-      border-radius: 3px;
-      font-size: 14px;
+      border-radius: 62px;
+      font-size: 16px;
       margin-right: 10px;
       background-color: #cccccc;
+      outline: none;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      &:focus{
+        border: 2px solid rgb(126, 126, 249);
+        background-color: #e3e0e0;
+      }
     }
 
     button {

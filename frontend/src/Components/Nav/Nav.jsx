@@ -1,22 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import route from "../route";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Nav.scss";
 
-import Profile from "../Profile/Profile";
-
-const Nav = ({setIsProfileOpen}) => {
+const Nav = ({ setIsProfileOpen }) => {
   const token = localStorage.getItem("Auth");
   const navigate = useNavigate();
   const [user, setUser] = useState({});
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    getUserDetails();
-  }, []);
-
-  const getUserDetails = async () => {
+  // ✅ useCallback to avoid infinite loop warning
+  const getUserDetails = useCallback(async () => {
     try {
       const { status, data } = await axios.get(`${route()}user/nav`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -26,11 +21,17 @@ const Nav = ({setIsProfileOpen}) => {
     } catch (error) {
       navigate("/login");
     }
-  };
+  }, [token, navigate]);
+
+  useEffect(() => {
+    getUserDetails();
+  }, [getUserDetails]);
 
   const handleLogout = () => {
-    localStorage.removeItem("Auth");
-    navigate("/login");
+    if (window.confirm("Are you sure you want to logout?")) {
+      localStorage.removeItem("Auth");
+      navigate("/login");
+    }
   };
 
   return (
@@ -65,15 +66,19 @@ const Nav = ({setIsProfileOpen}) => {
         <div className="sidebar-user">
           <img
             src={user?.profile || "/img/default-avatar.png"}
-            alt="Profile"
+            alt={user?.username || "User"}
             className="sidebar-profile"
           />
-          <h3>{user?.username}</h3>
+          <h3>{user?.username || "User"}</h3>
         </div>
 
         <div className="sidebar-actions">
-          <button  onClick={() => {  setIsProfileOpen(true);
-              setIsSidebarOpen(false);}}>
+          <button
+            onClick={() => {
+              setIsProfileOpen(true);
+              setIsSidebarOpen(false);
+            }}
+          >
             Profile
           </button>
           <button

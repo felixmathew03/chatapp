@@ -1,164 +1,183 @@
-import React, { useState, useEffect } from 'react';
-import route from '../route';
-import axios from 'axios';
-import './ChatCard.scss';
-import { Link, useParams } from 'react-router-dom';
-import { FiArrowLeft } from 'react-icons/fi';
-import { AiOutlineSend } from 'react-icons/ai';
-import { AiOutlineDelete } from 'react-icons/ai'; 
-import { FiX} from 'react-icons/fi';
-import { useRef } from 'react';
-import io from 'socket.io-client';
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FiArrowLeft, FiX } from "react-icons/fi";
+import { AiOutlineSend, AiOutlineDelete } from "react-icons/ai";
+import axios from "axios";
+import route from "../route";
+import socket from "../socket";
+import "./ChatCard.scss";
 
-const socket = io('http://localhost:3000'); // Match your backend URL
-
-const ChatCard = ({id,setChatCardId,setIsChatOpen}) => {
-  const value = localStorage.getItem('Auth');
-  const [uid, setUid] = useState('');
-  const [message, setMessage] = useState('');
+const ChatCard = ({ id, setChatCardId, setIsChatOpen }) => {
+  const value = localStorage.getItem("Auth");
+  const [uid, setUid] = useState("");
+  const [message, setMessage] = useState("");
   const [receiver, setReceiver] = useState({});
   const [messages, setMessages] = useState([]);
-  const [longPressMsg, setLongPressMsg] = useState(null); // State to track long-pressed message
-  const [showPopover, setShowPopover] = useState(false); // State to control popover visibility
-  const [pressTimer, setPressTimer] = useState(null); // Timer ID for long press detection
+  const [longPressMsg, setLongPressMsg] = useState(null);
+  const [showPopover, setShowPopover] = useState(false);
+  const messagesEndRef = useRef(null);
+  const navigate = useNavigate();
 
+  // 🟢 Fetch chat data and setup socket listeners
   useEffect(() => {
     getDetails();
-  
-    // Listen for real-time messages
-    socket.on('receiveMessage', (msg) => {
+  }, []);
+
+  useEffect(() => {
+    if (!uid) return;
+
+    socket.connect();
+
+    // Join user-specific room
+    socket.emit("join", uid);
+
+    // Listen for new messages
+    socket.on("receiveMessage", (msg) => {
       if (
-        (msg.senderId === receiver._id && msg.receiver === uid) ||
-        (msg.senderId === uid && msg.receiver === receiver._id)
+        (msg.senderId === receiver._id && msg.receiverId === uid) ||
+        (msg.senderId === uid && msg.receiverId === receiver._id)
       ) {
-        setMessages(prev => [...prev, msg]);
+        setMessages((prev) => [...prev, msg]);
       }
     });
-  
-    // Clean up on unmount
+
     return () => {
-      socket.off('receiveMessage');
+      socket.off("receiveMessage");
+      socket.disconnect();
     };
   }, [uid, receiver]);
+
+  // 🟢 Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // 🟢 Fetch messages + receiver data
   const getDetails = async () => {
-    const { status, data } = await axios.get(`${route()}message/chat/${id}`, {
-      headers: { Authorization: `Bearer ${value}` },
-    });
-    if (status === 200) {
-      setMessages(data.chats);
-      setReceiver(data.receiver);
-      setUid(data.uid);
-    } else {
-      alert(data.msg);
-      navigate('/login');
-    }
-  };
-
-  const handleSend = async () => {
-    if (message.trim()) {
-      const currentDate = new Date();
-      const [date, time] = currentDate.toLocaleString().split(', ');
-      const { status, data } = await axios.post(
-        `${route()}message/addmessage/${id}`,
-        { message, date, time },
-        { headers: { Authorization: `Bearer ${value}` } }
-      );
-      if (status === 201) {
-        if (data.msg === 'success') {
-          const sentMsg = {
-            message,
-            time,
-            date,
-            senderId: uid,
-            receiver: receiver._id
-          };
-      
-          // Emit message via Socket.IO
-          socket.emit('sendMessage', sentMsg);
-      
-          // Optionally update UI optimistically
-          setMessages(prev => [...prev, sentMsg]);
-        }
-        setMessage('');
-      }
-    }
-  };
-  // Detect long press
-  const handleLongPressStart = (msg) => {
-    // Set a timer to detect long press
-
-    const timer = setTimeout(() => {
-      setLongPressMsg(msg);
-      setShowPopover(true);
-    }, 500); // 500ms is the threshold for long press
-
-    setPressTimer(timer);
-  };
-
-  const handleLongPressEnd = () => {
-    // Clear the timer if the press is released early
-    clearTimeout(pressTimer);
-  };
-
-  const handleDelete = async () => {
     try {
-      const { status, data } = await axios.delete(`${route()}message/deletemessage/${longPressMsg._id}`, {
+      const { status, data } = await axios.get(`${route()}message/chat/${id}`, {
         headers: { Authorization: `Bearer ${value}` },
       });
-      if (status === 201 && data.msg === 'success') {
-        setShowPopover(false);
-        getDetails();
+      if (status === 200) {
+        setMessages(data.chats);
+        setReceiver(data.receiver);
+        setUid(data.uid);
       }
-    } catch (error) {
-      alert("Cannot delete others message")
+    } catch (err) {
+      navigate("/login");
+    }
+  };
+
+  // 🟢 Send a message
+  const handleSend = async () => {
+    if (!message.trim()) return;
+
+    try {
+      const { status, data } = await axios.post(
+        `${route()}message/addmessage/${id}`,
+        { message },
+        { headers: { Authorization: `Bearer ${value}` } }
+      );
+
+      if (status === 201 && data.msg === "success") {
+        const sentMsg = {
+          message,
+          senderId: uid,
+          receiverId: receiver._id,
+          createdAt: new Date().toISOString(),
+        };
+
+        socket.emit("sendMessage", sentMsg);
+        setMessages((prev) => [...prev, sentMsg]);
+        setMessage("");
+      }
+    } catch (err) {
+      console.error("Message send failed:", err);
+    }
+  };
+
+  // 🟢 Delete a message
+  const handleDelete = async () => {
+    try {
+      const { status, data } = await axios.delete(
+        `${route()}message/deletemessage/${longPressMsg._id}`,
+        { headers: { Authorization: `Bearer ${value}` } }
+      );
+
+      if (status === 201 && data.msg === "success") {
+        setMessages((prev) => prev.filter((m) => m._id !== longPressMsg._id));
+      }
+    } catch {
+      alert("Cannot delete others' message");
+    } finally {
       setShowPopover(false);
     }
   };
 
-  const handleCancel = () => {
-    setShowPopover(false);
-  };
-
-  const handleBack = () => {
-    setChatCardId(null);
-    setIsChatOpen(false);
-  };
   return (
     <div className="chat-card">
+      {/* Header */}
       <div className="chat-header">
-         <div className="h2">
-         <button onClick={handleBack}><FiArrowLeft className="back-icon" /></button>
-          
-          <Link to={`/userprofile/${receiver._id}`}><img src={receiver.profile} alt="" /></Link>
+        <div className="h2">
+          <button
+            onClick={() => {
+              setChatCardId(null);
+              setIsChatOpen(false);
+            }}
+          >
+            <FiArrowLeft className="back-icon" />
+          </button>
+          <Link to={`/userprofile/${receiver._id}`}>
+            <img src={receiver.profile} alt={receiver.username} />
+          </Link>
           <p>{receiver.username}</p>
         </div>
       </div>
+
+      {/* Chat body */}
       <div className="chat-body">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={(msg.senderId === uid || msg.receiver === uid)
-              ? `message outgoing`
-              : `message incoming`}
-            onMouseDown={() => handleLongPressStart(msg)} // Detect long press start
-            onTouchStart={() => handleLongPressStart(msg)} // For mobile support
-            onMouseUp={handleLongPressEnd} // Handle press end
-            onTouchEnd={handleLongPressEnd} // For mobile support
-          >
-            <p>{msg.message}</p>
-            <p className="foot">{msg.time}</p>
-            
-            {showPopover && (
-            longPressMsg===msg&&(<div className="popover">
-              <button onClick={handleDelete}>
-                <AiOutlineDelete  /> 
-              </button>
-              <button onClick={handleCancel}><FiX/></button>
-            </div>)
-          )}
-          </div>
-        ))}
+        <div className="messages">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={
+                msg.senderId === uid ? "message outgoing" : "message incoming"
+              }
+              onMouseDown={() =>
+                setTimeout(() => {
+                  setLongPressMsg(msg);
+                  setShowPopover(true);
+                }, 500)
+              }
+              onMouseUp={() => clearTimeout()}
+            >
+              <p>{msg.message}</p>
+              <p className="foot">
+                {msg.createdAt
+                  ? new Date(msg.createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : ""}
+              </p>
+
+              {showPopover && longPressMsg === msg && (
+                <div className="popover">
+                  <button onClick={handleDelete}>
+                    <AiOutlineDelete />
+                  </button>
+                  <button onClick={() => setShowPopover(false)}>
+                    <FiX />
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+          <div ref={messagesEndRef}></div>
+        </div>
       </div>
+
+      {/* Footer */}
       <div className="chat-footer">
         <input
           type="text"
@@ -166,9 +185,10 @@ const ChatCard = ({id,setChatCardId,setIsChatOpen}) => {
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type your message here..."
         />
-        <button type='submit' onClick={handleSend}><AiOutlineSend style={{ fontSize: '24px' }} /></button>
+        <button onClick={handleSend} disabled={!message.trim()}>
+          <AiOutlineSend size={24} />
+        </button>
       </div>
-      
     </div>
   );
 };

@@ -1,12 +1,17 @@
 import mongoose from "mongoose";
 
-const messageSchema=new mongoose.Schema({
-    senderId:{type:String},
-    receiverId:{type:String},
-    message:{type:String},
-    time:{type:String},
-    date:{type:String},
-    seen:{type:Boolean}
-})
+const messageSchema = new mongoose.Schema(
+  {
+    senderId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    receiverId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    message: { type: String, required: true },
+    seen: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+);
 
-export default mongoose.model.Messages || mongoose.model("Message",messageSchema);
+// 🧠 Performance indexes
+messageSchema.index({ senderId: 1, receiverId: 1, createdAt: -1 });
+messageSchema.index({ receiverId: 1, seen: 1 });
+
+export default mongoose.model("Message", messageSchema);

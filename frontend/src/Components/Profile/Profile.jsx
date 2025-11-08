@@ -1,116 +1,104 @@
-import React, { useState,useEffect } from "react";
-import { FaPhoneAlt, FaEnvelope, FaCamera, FaUser } from "react-icons/fa"; 
-import { FiCheck, FiX, FiEdit} from 'react-icons/fi';
+import React, { useState, useEffect } from "react";
+import { FaPhoneAlt, FaEnvelope, FaCamera, FaUser } from "react-icons/fa";
+import { FiCheck, FiX, FiEdit } from "react-icons/fi";
 import axios from "axios";
 import route from "../route";
-import './Profile.scss';
-import Nav from "../Nav/Nav";
+import "./Profile.scss";
 import { useNavigate } from "react-router-dom";
 
-const Profile = ({setIsProfileOpen}) => {
-  const navigate=useNavigate();
-  const value=localStorage.getItem("Auth")
+const Profile = ({ setIsProfileOpen }) => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("Auth");
   const [profile, setProfile] = useState("");
   const [username, setUsername] = useState("");
-  const [phone, setPhone] = useState(0);
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [isUEdit,setIsUEdit]=useState(false);
-  const [isPEdit,setIsPEdit]=useState(false);
-  const [isEEdit,setIsEEdit]=useState(false);
-  useEffect(()=>{
+  const [isUEdit, setIsUEdit] = useState(false);
+  const [isPEdit, setIsPEdit] = useState(false);
+  const [isEEdit, setIsEEdit] = useState(false);
+
+  useEffect(() => {
     getDetails();
-    },[])
-    const getDetails=async()=>{
-        try {
-        const {status,data}=await axios.get(`${route()}user/profile`,{headers:{"Authorization":`Bearer ${value}`}})
-        if(status==200){
-            setEmail(data.email);
-            setUsername(data.username);
-            setPhone(data.phone);
-            setProfile(data.profile)
-        }else{
-            alert(data.msg);
-            navigate('/login')
-        }
-        } catch (error) {
-        navigate('/login')
-        }
+  }, []);
+
+  const getDetails = async () => {
+    try {
+      const { status, data } = await axios.get(`${route()}user/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (status === 200) {
+        setEmail(data.email);
+        setUsername(data.username);
+        setPhone(data.phone);
+        setProfile(data.profile || "/img/default-avatar.png");
+      } else {
+        alert(data.msg);
+        navigate("/login");
+      }
+    } catch (error) {
+      navigate("/login");
     }
-  // Edit functions
-  const handleImageChange = async(e) => {
-    const profile=await convertToBase64(e.target.files[0]);
-    setProfile(profile)
-    const {status,data}=await axios.put(`${route()}user/editdetails`,{profile},{headers:{"Authorization":`Bearer ${value}`}});
-    if (status==201) {
-        if (data.msg=="success") {
-            alert("Photo edited");
-            getDetails();
-        }
+  };
+
+  const convertToBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+    });
+
+  const updateUserDetail = async (payload, successMsg) => {
+    try {
+      const { status, data } = await axios.put(
+        `${route()}user/editdetails`,
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (status === 201 && data.msg === "success") {
+        alert(successMsg);
+        getDetails();
       }
-  };
-  function convertToBase64(file) {
-    return new Promise((resolve,reject)=>{
-        const fileReader=new FileReader();
-        fileReader.readAsDataURL(file);
-        fileReader.onload=()=>{
-            resolve(fileReader.result)
-        }
-        fileReader.onerror= (error)=>{
-            reject(error)
-        }
-    })
-  }
-  const handleNameChange = (e) => {
-    setUsername(e.target.value);
+    } catch (error) {
+      alert("Update failed");
+    }
   };
 
-  const handlePhoneChange = (e) => {
-    setPhone(e.target.value);
+  // Handlers
+  const handleImageChange = async (e) => {
+    const profile = await convertToBase64(e.target.files[0]);
+    setProfile(profile);
+    updateUserDetail({ profile }, "Profile photo updated!");
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const handleSaveName = () => {
+    updateUserDetail({ username }, "Username updated!");
+    setIsUEdit(false);
   };
 
-  // Save changes functions
-  const handleSaveName =async () => {
-    const {status,data}=await axios.put(`${route()}user/editdetails`,{username},{headers:{"Authorization":`Bearer ${value}`}});
-      if (status==201) {
-        if (data.msg=="success") {
-            alert("Name edited");
-          getDetails();
-        }
-      }
+  const handleSavePhone = () => {
+    updateUserDetail({ phone }, "Phone number updated!");
+    setIsPEdit(false);
   };
 
-  const handleSavePhone = async() => {
-    const {status,data}=await axios.put(`${route()}user/editdetails`,{phone},{headers:{"Authorization":`Bearer ${value}`}});
-      if (status==201) {
-        if (data.msg=="success") {
-            alert("Phone edited");
-          getDetails();
-        }
-      }
+  const handleSaveEmail = () => {
+    updateUserDetail({ email }, "Email updated!");
+    setIsEEdit(false);
   };
 
-  const handleSaveEmail = async() => {
-    const {status,data}=await axios.put(`${route()}user/editdetails`,{phone},{headers:{"Authorization":`Bearer ${value}`}});
-      if (status==201) {
-        if (data.msg=="success") {
-            alert("Phone edited");
-          getDetails();
-        }
-      }
-  };
-const handleCancel=()=>{
-  console.log("hai");
-  
+  const handleCancel = () => {
     setIsProfileOpen(false);
-}
+  };
+
   return (
     <div className="Profile">
       <div className="profile-card">
-        <img src="img/close_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg" className="close" alt="" onClick={handleCancel}/>
+        <img
+          src="/img/close_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg"
+          className="close"
+          alt="close"
+          onClick={handleCancel}
+        />
         <div className="avatar">
           <div className="img_container">
             <div className="hover-effect"></div>
@@ -118,6 +106,7 @@ const handleCancel=()=>{
               className="avatar-image"
               src={profile}
               alt="Avatar"
+              onError={(e) => (e.target.src = "/img/default-avatar.png")}
             />
             <label htmlFor="image-upload" className="edit-icon">
               <FaCamera />
@@ -130,21 +119,28 @@ const handleCancel=()=>{
             />
           </div>
         </div>
+
         <div className="headings">
-        <FaUser size={20}  className="icon" />
+          <FaUser size={20} className="icon" />
           <input
             type="text"
             value={username}
-            onChange={handleNameChange}
+            onChange={(e) => setUsername(e.target.value)}
             className="edit-input"
             disabled={!isUEdit}
           />
-          {isUEdit?(<button className="save-btn" >
-            <FiCheck onClick={handleSaveName} color="green"/> <FiX onClick={()=>setIsUEdit(!isUEdit)}  color="red"/> 
-          </button>):<button className="save-btn" >
-          <FiEdit   onClick={()=>setIsUEdit(!isUEdit)}/>
-          </button>}
+          {isUEdit ? (
+            <button className="save-btn">
+              <FiCheck onClick={handleSaveName} color="green" />{" "}
+              <FiX onClick={() => setIsUEdit(false)} color="red" />
+            </button>
+          ) : (
+            <button className="save-btn">
+              <FiEdit onClick={() => setIsUEdit(true)} />
+            </button>
+          )}
         </div>
+
         <div className="contact-info">
           <ul>
             <li>
@@ -152,33 +148,45 @@ const handleCancel=()=>{
               <input
                 type="text"
                 value={phone}
-                onChange={handlePhoneChange}
+                onChange={(e) => setPhone(e.target.value)}
                 className="edit-input"
                 disabled={!isPEdit}
               />
-              {isPEdit?(<button className="save-btn" >
-            <FiCheck onClick={handleSavePhone} color="green"/> <FiX onClick={()=>setIsPEdit(!isPEdit)}  color="red"/> 
-          </button>):<button className="save-btn" >
-          <FiEdit   onClick={()=>setIsPEdit(!isPEdit)}/>
-          </button>}
+              {isPEdit ? (
+                <button className="save-btn">
+                  <FiCheck onClick={handleSavePhone} color="green" />{" "}
+                  <FiX onClick={() => setIsPEdit(false)} color="red" />
+                </button>
+              ) : (
+                <button className="save-btn">
+                  <FiEdit onClick={() => setIsPEdit(true)} />
+                </button>
+              )}
             </li>
+
             <li>
-              <FaEnvelope  className="icon" />
+              <FaEnvelope className="icon" />
               <input
                 type="text"
                 value={email}
-                onChange={handleEmailChange}
+                onChange={(e) => setEmail(e.target.value)}
                 className="edit-input"
                 disabled={!isEEdit}
               />
-              {isEEdit?(<button className="save-btn" >
-            <FiCheck onClick={handleSaveEmail} color="green"/> <FiX onClick={()=>setIsEEdit(!isEEdit)}  color="red"/> 
-          </button>):<button className="save-btn" >
-          <FiEdit   onClick={()=>setIsEEdit(!isEEdit)}/>
-          </button>}
+              {isEEdit ? (
+                <button className="save-btn">
+                  <FiCheck onClick={handleSaveEmail} color="green" />{" "}
+                  <FiX onClick={() => setIsEEdit(false)} color="red" />
+                </button>
+              ) : (
+                <button className="save-btn">
+                  <FiEdit onClick={() => setIsEEdit(true)} />
+                </button>
+              )}
             </li>
           </ul>
         </div>
+
         <hr className="divider" />
       </div>
     </div>
